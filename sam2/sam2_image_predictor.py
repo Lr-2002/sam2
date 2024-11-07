@@ -194,6 +194,7 @@ class SAM2ImagePredictor:
         all_masks = []
         all_ious = []
         all_low_res_masks = []
+        all_obj_ptrs = []
         for img_idx in range(num_images):
             # Transform input prompts
             point_coords = (
@@ -214,7 +215,7 @@ class SAM2ImagePredictor:
                 normalize_coords,
                 img_idx=img_idx,
             )
-            masks, iou_predictions, low_res_masks = self._predict(
+            masks, iou_predictions, low_res_masks, obj_ptrs = self._predict(
                 unnorm_coords,
                 labels,
                 unnorm_box,
@@ -231,8 +232,9 @@ class SAM2ImagePredictor:
             all_masks.append(masks_np)
             all_ious.append(iou_predictions_np)
             all_low_res_masks.append(low_res_masks_np)
+            all_obj_ptrs.append(obj_ptrs)
 
-        return all_masks, all_ious, all_low_res_masks
+        return all_masks, all_ious, all_low_res_masks, all_obj_ptrs
 
     def predict(
         self,
